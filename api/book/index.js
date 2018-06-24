@@ -33,7 +33,7 @@ router.get('/:id', (req, res) => {
 
     let book = getBook(req.params.id)
 
-    aws_logs.putRecord(aws_logs.get_book, {
+    aws_logs.putRecord(aws_logs.actions.get_book, {
         user_id: req.headers['user_id'],
         platform: req.headers['platform'],
         ad_id: req.headers['ad_id'],
@@ -49,7 +49,7 @@ router.get('/:id', (req, res) => {
 router.get('/page/:id/:page', (req, res) => {
     let page = getPage(req.params.id, req.params.page)
 
-    aws_logs.putRecord(aws_logs.get_page, {
+    aws_logs.putRecord(aws_logs.actions.get_page, {
         user_id: req.headers['user_id'],
         platform: req.headers['platform'],
         ad_id: req.headers['ad_id'],
@@ -65,7 +65,7 @@ router.get('/page/:id/:page', (req, res) => {
 router.post('/rate', (req, res) => {
     let rate = rateBook(req.body)
 
-    aws_logs.putRecord(aws_logs.rate_book, {
+    aws_logs.putRecord(aws_logs.actions.rate_book, {
         user_id: req.headers['user_id'],
         platform: req.headers['platform'],
         ad_id: req.headers['ad_id'],
