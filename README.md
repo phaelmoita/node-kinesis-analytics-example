@@ -12,6 +12,11 @@ To execute tests
 npm test
 ```
 
+To execute tests with kinesis
+```
+NODE_AWS_KEY=********* NODE_AWS_SECRET=************************** NODE_AWS_STREAM=your-tutorial-stream npm test
+```
+
 To make logs
 ```
 bash try_api.sh

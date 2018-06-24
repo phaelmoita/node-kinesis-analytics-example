@@ -2,7 +2,9 @@
 
 const
     express = require('express'),
-    router = express.Router()
+    router = express.Router(),
+    path = require('path'),
+    aws_logs = require(path.resolve(__dirname, '../../utils/aws_logs_firehose'))
 
 function getBook(id) {
     return {
@@ -28,22 +30,51 @@ function rateBook(bookRate) {
 }
 
 router.get('/:id', (req, res) => {
+
+    let book = getBook(req.params.id)
+
+    aws_logs.putRecord(aws_logs.get_book, {
+        user_id: req.headers['user_id'],
+        platform: req.headers['platform'],
+        ad_id: req.headers['ad_id'],
+        attrs: book
+    })
+
     return res.status(200).json({
         code: 200,
-        result: getBook(req.params.id)
+        result: book
     });
 });
 
 router.get('/page/:id/:page', (req, res) => {
+    let page = getPage(req.params.id, req.params.page)
+
+    aws_logs.putRecord(aws_logs.get_page, {
+        user_id: req.headers['user_id'],
+        platform: req.headers['platform'],
+        ad_id: req.headers['ad_id'],
+        attrs: page
+    })
+
     return res.status(200).json({
         code: 200,
-        result: getPage(req.params.id, req.params.page)
+        result: page
     });
 });
 
 router.post('/rate', (req, res) => {
+    let rate = rateBook(req.body)
+
+    aws_logs.putRecord(aws_logs.rate_book, {
+        user_id: req.headers['user_id'],
+        platform: req.headers['platform'],
+        ad_id: req.headers['ad_id'],
+        attrs: rate
+    })
+
     return res.status(200).json({
         code: 200,
+        result: rate,
         message: 'Your book was rated!!!'
     });
 });
