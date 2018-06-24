@@ -1,7 +1,7 @@
 {
   "name": "node-kinesis-analytics-example",
   "version": "1.0.0",
-  "description": "Example code using express and aws kinesis",
+  "description": "Example code using express and aws kinesis firehoser",
   "main": "server.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha test/api-routes/api.book.test.js"
