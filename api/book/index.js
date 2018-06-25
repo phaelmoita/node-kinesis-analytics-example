@@ -4,79 +4,91 @@ const
     express = require('express'),
     router = express.Router(),
     path = require('path'),
-    aws_logs = require(path.resolve(__dirname, '../../utils/aws_logs_firehose'))
+    awsLogs = require(path.resolve(__dirname, '../../utils/aws.logs.firehose'))
 
 function getBook(id) {
-    return {
-        id: id,
-        name: `Book - ${id}`
-    }
+    return new Promise( (resolve, reject) => {
+        resolve({
+            id: id,
+            name: `Book - ${id}`
+        })
+    })
 }
 
 function getPage(id, page) {
-    return {
-        id: id,
-        name: `Book - ${id}`,
-        page: page,
-        page_content: `Hey! That is the content of Book - ${id}`
-    }
+    return new Promise((resolve, reject) => {
+        resolve({
+            id: id,
+            name: `Book - ${id}`,
+            page: page,
+            page_content: `Hey! That is the content of Book - ${id}`
+        })
+    })
 }
 
 function rateBook(bookRate) {
-    return {
-        id: bookRate.book_id,
-        rate: bookRate.rate
-    }
+    return new Promise((resolve, reject) => {
+        resolve({
+            id: bookRate.book_id,
+            rate: bookRate.rate
+        })
+    })
 }
 
 router.get('/:id', (req, res) => {
 
-    let book = getBook(req.params.id)
+    getBook(req.params.id).then(book => {
 
-    aws_logs.putRecord(aws_logs.actions.get_book, {
-        user_id: req.headers['user_id'],
-        platform: req.headers['platform'],
-        ad_id: req.headers['ad_id'],
-        attrs: book
+        awsLogs.putRecord(awsLogs.actions.get_book, {
+            user_id: req.headers['user_id'],
+            platform: req.headers['platform'],
+            ad_id: req.headers['ad_id'],
+            attrs: book
+        })
+
+        res.status(200).json({
+            code: 200,
+            result: book
+        })
+
     })
-
-    return res.status(200).json({
-        code: 200,
-        result: book
-    });
-});
+})
 
 router.get('/page/:id/:page', (req, res) => {
-    let page = getPage(req.params.id, req.params.page)
+    getPage(req.params.id, req.params.page).then(page => {
 
-    aws_logs.putRecord(aws_logs.actions.get_page, {
-        user_id: req.headers['user_id'],
-        platform: req.headers['platform'],
-        ad_id: req.headers['ad_id'],
-        attrs: page
+        awsLogs.putRecord(awsLogs.actions.get_page, {
+            user_id: req.headers['user_id'],
+            platform: req.headers['platform'],
+            ad_id: req.headers['ad_id'],
+            attrs: page
+        })
+
+        res.status(200).json({
+            code: 200,
+            result: page
+        })
+
     })
-
-    return res.status(200).json({
-        code: 200,
-        result: page
-    });
-});
+})
 
 router.post('/rate', (req, res) => {
-    let rate = rateBook(req.body)
+    rateBook(req.body).then(rate => {
 
-    aws_logs.putRecord(aws_logs.actions.rate_book, {
-        user_id: req.headers['user_id'],
-        platform: req.headers['platform'],
-        ad_id: req.headers['ad_id'],
-        attrs: rate
+        awsLogs.putRecord(awsLogs.actions.rate_book, {
+            user_id: req.headers['user_id'],
+            platform: req.headers['platform'],
+            ad_id: req.headers['ad_id'],
+            attrs: rate
+        })
+
+        res.status(200).json({
+            code: 200,
+            result: rate,
+            message: 'Your book was rated!!!'
+        })
+
     })
-
-    return res.status(200).json({
-        code: 200,
-        result: rate,
-        message: 'Your book was rated!!!'
-    });
-});
+})
 
 module.exports = router;
