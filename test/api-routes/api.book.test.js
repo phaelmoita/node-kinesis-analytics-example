@@ -35,7 +35,10 @@ describe('Suite api route book', () => {
             method: 'GET',
             url: `http://localhost:${port}/api/book/page/1/2`,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'user_id': '123456',
+                'platform': 'web',
+                'ad_id': 'awsder-6rf44553-gdfgdey-75645'
             }
         }, (err, httpResponse, body) => {
             assert.equal(err, undefined, 'not error ok')
@@ -52,7 +55,10 @@ describe('Suite api route book', () => {
             method: 'POST',
             url: `http://localhost:${port}/api/book/rate/`,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'user_id': '123456',
+                'platform': 'web',
+                'ad_id': 'awsder-6rf44553-gdfgdey-75645'
             },
             json: {"book_id": 1, "rate": 5}
         }, (err, httpResponse, body) => {
