@@ -1,5 +1,5 @@
 # node-kinesis-analytics-example [![Build Status](https://travis-ci.org/phaelmoita/node-kinesis-analytics-example.svg?branch=master)](https://travis-ci.org/phaelmoita/node-kinesis-analytics-example)
-A single example using nodejs and Amazon Kinesis Firehose
+A single example using nodejs and Amazon Kinesis Firehose, you can read the articles about [here](https://www.linkedin.com/pulse/data-lake-nodejs-amazon-kinesis-raphael-oliveira/)
 
 To start server
 
